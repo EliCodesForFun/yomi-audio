@@ -43,8 +43,10 @@ def process_pattern(text, term, reading):
 
 def search(term, reading):
     # return a path to audio file
+    print(f"searching for term: {term} with reading {reading}")
     glob_pattern = None
-    pattern = f"{term}.mp3"
+    pattern = f"{reading} - {term}.mp3"
+    #pattern = f"{term}.mp3"
     if args.glob:
         glob_pattern = process_pattern(args.glob, term, reading)
     if args.pattern:
@@ -71,5 +73,17 @@ def get_audio():
         raise NotFound()
     return send_file(file)
 
+
+#This allows you to access a file by going directly to localhost:8080/api/reading - expression
+# ex. localhost:8080/api/えきまえ - 駅前
+@app.route("/api/<reading> - <expression>")
+def api(reading, expression):
+    print(f"made it to API route here searching with {reading} and {expression}")
+    base_path = r'C:\xampp\htdocs\mp3_jp'
+    file_path  = f'{base_path}\\{reading} - {expression}.mp3'
+    return send_file(file_path)
+    
+
 if __name__ == '__main__':
+    print("made it into here")
     serve(app, listen="*:8080")
