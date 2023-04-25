@@ -44,7 +44,22 @@ The other way with `-g` utilizes powerful [glob](<https://en.wikipedia.org/wiki/
 Once you have the server running, open Yomichan settings. Click "Configure audio playback sources" under the Audio section and add the following custom URL:
 
 ```
-http://localhost:5000/?expression={term}&reading={reading}
+http://localhost:8080/?expression={term}&reading={reading}
 ```
 
 
+
+### Quick Docker setup
+
+The dockerfile starts the python app.py file using the directory "/var/lib/misc/jp_audio" from the container, so we can map it to a volume on our host machine.
+
+`docker build -t yomi-audio:latest .`
+`docker container run -d -v C:/path/to/local_folder/with/mp3_files:/var/lib/misc/jp_audio -p 8088:8080 vladdydaddy/hey-python-flask:latest`
+
+Here we've mapped it to the local port 8088 in case we have another web server running on our host machine.
+
+You can test your file by going to:
+localhost:8088/api/えきまえ - 駅前
+if you have a file called "えきまえ - 駅前.mp3" for example.
+
+In the future, the code can be modified to serve additional audio filetypes.
